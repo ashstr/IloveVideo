@@ -9,6 +9,7 @@ module.exports = function() {
     var temp = './.tmp/';
     var wiredep = require('wiredep');
     var bowerFiles = wiredep({ devDependencies: true })['js'];
+    var mochaFiles = './src/serverTests/'
 
     var config = {
         /**
@@ -36,16 +37,14 @@ module.exports = function() {
         report: report,
         root: root,
         server: server,
-        serverFiles: [server+"**/*.js"],
+        serverFiles: [server + "**/*.js"],
         temp: temp,
 
         /**
-         * optimized files
+         * Mocha Files
          */
-        optimized: {
-            app: 'app.js',
-            lib: 'lib.js'
-        },
+
+        mochaFiles: mochaFiles,
 
         /**
          * template cache

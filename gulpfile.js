@@ -124,16 +124,30 @@ gulp.task('bump', function() {
 
 
 gulp.task('serve', ['inject'], function() {
-    serve(true /* isDev */ );
+    serve(true /*isDev*/ , false /*mocha*/ );
+});
+
+gulp.task('serve-mocha',  function() {
+    serve(true /*isDev*/ , true /*mocha*/ );
 });
 
 gulp.task('test', ['templatecache'], function(done) {
-    startTests(true /* singleRun */ , done);
+    startTests(true, done);
+});
+
+gulp.task('mocha',['serve-mocha'] ,function(done) {
+
+    process.env.DB_FILE = __dirname+'/src/serverTests/db.json';    
+    return gulp.src([config.mochaFiles + '/*.js'], { read: false })
+        .pipe($.mocha({ reporter: 'list' }))
+        .on('error', $.log);
+    
+
 });
 
 ////////////
 
-function serve(isDev, specRunner) {
+function serve(isDev, mocha) {
     var nodeOptions = {
         script: config.nodeServer,
         delayTime: 1,
@@ -141,22 +155,24 @@ function serve(isDev, specRunner) {
             'PORT': port,
             'NODE_ENV': isDev ? 'dev' : 'build'
         },
-        ext:'js',
-        watch: config.server
+        ext: 'js',
+        watch: [config.server,config.mochaFiles]
     };
 
     return $.nodemon(nodeOptions)
         .on('restart', function(ev) {
             log('*** nodemon restarted');
             log('files changed on restart:\n' + ev);
-            setTimeout(function() {
-                browserSync.notify('reloading now ...');
-                browserSync.reload({ stream: false });
-            }, config.browserReloadDelay);
+            if (!mocha)
+                setTimeout(function() {
+                    browserSync.notify('reloading now ...');
+                    browserSync.reload({ stream: false });
+                }, config.browserReloadDelay);
         })
         .on('start', function() {
             log('*** nodemon started');
-            startBrowserSync(isDev, specRunner);
+            if (!mocha)
+                startBrowserSync(isDev);
         })
         .on('crash', function() {
             log('*** nodemon crashed: script crashed for some reason');
@@ -182,7 +198,7 @@ function notify(options) {
     notifier.notify(notifyOptions);
 }
 
-function startBrowserSync(isDev, specRunner) {
+function startBrowserSync(isDev) {
     if (args.nosync || browserSync.active) {
         return;
     }
@@ -218,10 +234,6 @@ function startBrowserSync(isDev, specRunner) {
         notify: true,
         reloadDelay: 0 //1000
     };
-
-    if (specRunner) {
-        options.startPath = config.specRunnerFile;
-    }
 
     browserSync(options);
 }
