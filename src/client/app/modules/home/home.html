@@ -1,0 +1,20 @@
+<div class="container mainWindow" ui-scroll-viewport>
+    <div ui-scroll="vid in videos" buffer-size="4" padding="2" top-visible ="item" >
+
+        <div class="row">
+            <div class="offset-md-2 col-md-8">
+                <div class="card" vidid="{{vid.$loki}}">
+                    <vjs-video-container vjs-setup="vid" vjs-ratio="4:3">
+                        <video class="video-js vjs-default-skin" controls preload="auto" poster="{{vid.url}}" >
+                        </video>
+                    </vjs-video-container>
+                    <div class="card-block">
+                        <h4 class="card-title">{{vid.title}} <button type="button" class="btn btn-fb"><i class="fa fa-facebook"></i></button></h4>
+                        
+                    </div>
+                </div>
+                <hr class="extra-margin">
+            </div>
+        </div>
+    </div>
+</div>

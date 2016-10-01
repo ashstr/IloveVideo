@@ -5,7 +5,7 @@ var config = require('./gulp.config')();
 var del = require('del');
 var path = require('path');
 var _ = require('lodash');
-var $ = require('gulp-load-plugins')({lazy: true});
+var $ = require('gulp-load-plugins')({ lazy: true });
 var port = process.env.PORT || config.defaultPort;
 
 gulp.task('help', $.taskListing);
@@ -19,7 +19,7 @@ gulp.task('vet', function() {
         .pipe($.if(args.verbose, $.print()))
         .pipe($.jscs())
         .pipe($.jshint())
-        .pipe($.jshint.reporter('jshint-stylish', {verbose: true}))
+        .pipe($.jshint.reporter('jshint-stylish', { verbose: true }))
         .pipe($.jshint.reporter('fail'));
 });
 
@@ -30,40 +30,18 @@ gulp.task('styles', ['clean-styles'], function() {
         .src(config.scss)
         .pipe($.plumber())
         .pipe($.sass().on('error', $.sass.logError))
-        .pipe($.autoprefixer({browsers: ['last 2 version', '> 5%']}))
+        .pipe($.autoprefixer({ browsers: ['last 2 version', '> 5%'] }))
         .pipe(gulp.dest(config.temp));
 });
 
-gulp.task('fonts', ['clean-fonts'], function() {
-    log('Copying fonts');
 
-    return gulp
-        .src(config.fonts)
-        .pipe(gulp.dest(config.build + 'fonts'));
-});
-
-gulp.task('images', ['clean-images'], function() {
-    log('Copying and compressing the images');
-
-    return gulp
-        .src(config.images)
-        .pipe($.imagemin({optimizationLevel: 4}))
-        .pipe(gulp.dest(config.build + 'images'));
-});
 
 gulp.task('clean', function(done) {
-    var delconfig = [].concat(config.build, config.temp);
+    var delconfig = [].concat(config.temp);
     log('Cleaning: ' + $.util.colors.blue(delconfig));
     del(delconfig, done);
 });
 
-gulp.task('clean-fonts', function(done) {
-    clean(config.build + 'fonts/**/*.*', done);
-});
-
-gulp.task('clean-images', function(done) {
-    clean(config.build + 'images/**/*.*', done);
-});
 
 gulp.task('clean-styles', function(done) {
     clean(config.temp + '**/*.css', done);
@@ -71,9 +49,7 @@ gulp.task('clean-styles', function(done) {
 
 gulp.task('clean-code', function(done) {
     var files = [].concat(
-        config.temp + '**/*.js',
-        config.build + '**/*.html',
-        config.build + 'js/**/*.js'
+        config.temp + '**/*.js'
     );
     clean(files, done);
 });
@@ -87,11 +63,11 @@ gulp.task('templatecache', ['clean-code'], function() {
 
     return gulp
         .src(config.htmltemplates)
-        .pipe($.minifyHtml({empty: true}))
+        .pipe($.minifyHtml({ empty: true }))
         .pipe($.angularTemplatecache(
             config.templateCache.file,
             config.templateCache.options
-            ))
+        ))
         .pipe(gulp.dest(config.temp));
 });
 
@@ -107,7 +83,7 @@ gulp.task('wiredep', function() {
         .pipe(gulp.dest(config.client));
 });
 
-gulp.task('inject', ['wiredep', 'styles','templatecache'], function() {
+gulp.task('inject', ['wiredep', 'styles', 'templatecache'], function() {
     log('Wire up the app css into the html, and call wiredep ');
 
     return gulp
@@ -116,88 +92,6 @@ gulp.task('inject', ['wiredep', 'styles','templatecache'], function() {
         .pipe(gulp.dest(config.client));
 });
 
-gulp.task('build', ['optimize', 'images', 'fonts'], function() {
-    log('Building everything');
-
-    var msg = {
-        title: 'gulp build',
-        subtitle: 'Deployed to the build folder',
-        message: 'Running `gulp serve-build`'
-    };
-    del(config.temp);
-    log(msg);
-    notify(msg);
-});
-
-gulp.task('serve-specs', ['build-specs'], function(done) {
-    log('run the spec runner');
-    serve(true /* isDev */, true /* specRunner */);
-    done();
-});
-
-gulp.task('build-specs', ['templatecache'], function() {
-    log('building the spec runner');
-
-    var wiredep = require('wiredep').stream;
-    var options = config.getWiredepDefaultOptions();
-    var specs = config.specs;
-
-    options.devDependencies = true;
-
-    if (args.startServers) {
-        specs = [].concat(specs, config.serverIntegrationSpecs);
-    }
-
-    return gulp
-        .src(config.specRunner)
-        .pipe(wiredep(options))
-        .pipe($.inject(gulp.src(config.testlibraries),
-            {name: 'inject:testlibraries', read: false}))
-        .pipe($.inject(gulp.src(config.js)))
-        .pipe($.inject(gulp.src(config.specHelpers),
-            {name: 'inject:spechelpers', read: false}))
-        .pipe($.inject(gulp.src(specs),
-            {name: 'inject:specs', read: false}))
-        .pipe($.inject(gulp.src(config.temp + config.templateCache.file),
-            {name: 'inject:templates', read: false}))
-        .pipe(gulp.dest(config.client));
-});
-
-gulp.task('optimize', ['inject', 'test'], function() {
-    log('Optimizing the javascript, css, html');
-
-    var assets = $.useref.assets({searchPath: './'});
-    var templateCache = config.temp + config.templateCache.file;
-    var cssFilter = $.filter('**/*.css');
-    var jsLibFilter = $.filter('**/' + config.optimized.lib);
-    var jsAppFilter = $.filter('**/' + config.optimized.app);
-
-    return gulp
-        .src(config.index)
-        .pipe($.plumber())
-        .pipe($.inject(
-            gulp.src(templateCache, {read: false}), {
-            starttag: '<!-- inject:templates:js -->'
-        }))
-        .pipe(assets)
-        .pipe(cssFilter)
-        .pipe($.csso())
-        .pipe(cssFilter.restore())
-        .pipe(jsLibFilter)
-        .pipe($.uglify())
-        .pipe(jsLibFilter.restore())
-        .pipe(jsAppFilter)
-        .pipe($.ngAnnotate())
-        .pipe($.uglify())
-        .pipe(jsAppFilter.restore())
-        .pipe($.rev())
-        .pipe(assets.restore())
-        .pipe($.useref())
-        .pipe($.revReplace())
-        .pipe(gulp.dest(config.build))
-        .pipe($.rev.manifest())
-        .pipe(gulp.dest(config.build));
-});
 
 /**
  * Bump the version
@@ -228,20 +122,13 @@ gulp.task('bump', function() {
         .pipe(gulp.dest(config.root));
 });
 
-gulp.task('serve-build', ['build'], function() {
-    serve(false /* isDev */);
-});
 
 gulp.task('serve', ['inject'], function() {
-    serve(true /* isDev */);
+    serve(true /* isDev */ );
 });
 
-gulp.task('test', ['vet', 'templatecache'], function(done) {
-    startTests(true /* singleRun */, done);
-});
-
-gulp.task('autotest', ['vet', 'templatecache'], function(done) {
-    startTests(false /* singleRun */, done);
+gulp.task('test', ['templatecache'], function(done) {
+    startTests(true /* singleRun */ , done);
 });
 
 ////////////
@@ -254,7 +141,8 @@ function serve(isDev, specRunner) {
             'PORT': port,
             'NODE_ENV': isDev ? 'dev' : 'build'
         },
-        watch: [config.serverFiles]
+        ext:'js',
+        watch: config.server
     };
 
     return $.nodemon(nodeOptions)
@@ -263,7 +151,7 @@ function serve(isDev, specRunner) {
             log('files changed on restart:\n' + ev);
             setTimeout(function() {
                 browserSync.notify('reloading now ...');
-                browserSync.reload({stream: false});
+                browserSync.reload({ stream: false });
             }, config.browserReloadDelay);
         })
         .on('start', function() {

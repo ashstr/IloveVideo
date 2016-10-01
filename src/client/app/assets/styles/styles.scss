@@ -1,0 +1,94 @@
+@import "../../../../../bower_components/bootstrap/scss/bootstrap";
+@import "../../../../../bower_components/MDBootstrap/sass/mdb";
+body,
+html {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-width: 350px;
+    padding: 0;
+    margin: 0;
+    background: #ebebeb;
+    box-sizing: border-box;
+}
+
+.container-fluid {
+    position: static;
+    padding: 0;
+    margin: 0;
+}
+
+.mainWindow {
+    position: absolute;
+    top: 65px;
+    right: 0;
+    bottom: 50px;
+    left: 0;
+    overflow: hidden;
+    background: #ebebeb;
+}
+
+header {
+    -webkit-transition-property: height, box-shadow;
+    -moz-transition-property: height, box-shadow;
+    -o-transition-property: height, box-shadow;
+    transition-property: height, box-shadow;
+    -webkit-transition-timing-function: ease-out;
+    -moz-transition-timing-function: ease-out;
+    -o-transition-timing-function: ease-out;
+    transition-timing-function: ease-out;
+    -webkit-transition-duration: 0.2s;
+    -moz-transition-duration: 0.2s;
+    -o-transition-duration: 0.2s;
+    transition-duration: 0.2s;
+    background-color: #2d2d2d;
+}
+
+header .primary-color-dark {
+    background-color: transparent !important;
+}
+
+footer {
+    margin-top: 0px !important;
+    padding-top: 0px !important;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 9999;
+    width: 100%;
+    background: linear-gradient(to bottom, #353535, #353535) repeat-x;
+}
+
+main {
+    margin-top: 3rem;
+}
+
+.lead {
+    text-align: justify;
+}
+
+@media only screen and (max-width: 768px) {
+    .post-title {
+        margin-top: 1rem;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .read-more {
+        text-align: center;
+    }
+}
+
+.extra-margin {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+footer.page-footer .call-to-action {
+    padding-top: 0.3rem;
+    padding-bottom: 0.3rem;
+}
+.btn-fb {
+    background-color: #3B5998;
+}

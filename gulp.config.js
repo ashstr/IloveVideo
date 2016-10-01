@@ -1,6 +1,7 @@
 module.exports = function() {
     var client = './src/client/';
-    var clientApp = client + "app/";
+    var clientApp = client + 'app/';
+    var clienTest = client + 'tests/';
     var report = './report/';
     var root = './';
     var server = './src/server/';
@@ -35,7 +36,7 @@ module.exports = function() {
         report: report,
         root: root,
         server: server,
-        serverFiles: [server],
+        serverFiles: [server+"**/*.js"],
         temp: temp,
 
         /**
@@ -52,7 +53,7 @@ module.exports = function() {
         templateCache: {
             file: 'templates.js',
             options: {
-                module: 'app.core',
+                module: 'ilovevideo',
                 standAlone: false,
                 root: 'app/'
             }
@@ -87,7 +88,7 @@ module.exports = function() {
             'node_modules/mocha-clean/index.js',
             'node_modules/sinon-chai/lib/sinon-chai.js'
         ],
-        specs: [clientApp + '**/*.spec.js'],
+        specs: [clienTest + '**/*.spec.js'],
 
         /**
          * Karma and testing settings
@@ -119,12 +120,13 @@ module.exports = function() {
     ////////////////
 
     function getKarmaOptions() {
+        bowerFiles[5] = '!bower_components/MDBootstrap/js/mdb.min.js';
         var options = {
             files: [].concat(
                 bowerFiles,
                 config.specHelpers,
-                client + '**/*.module.js',
-                client + '**/*.js',
+                clientApp + '**/*.js',
+                config.specs,
                 temp + config.templateCache.file,
                 config.serverIntegrationSpecs
             ),
@@ -139,7 +141,7 @@ module.exports = function() {
             },
             preprocessors: {}
         };
-        options.preprocessors[clientApp + '**/!(*.spec)+(.js)'] = ['coverage'];
+        options.preprocessors[clienTest + '**/!(*.spec)+(.js)'] = ['coverage'];
         return options;
     }
 };

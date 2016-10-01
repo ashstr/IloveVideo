@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="ilovevideo">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
+    <title></title>
+    <base href="/">
+    <style>
+    /* This helps the ng-show/ng-hide animations start at the right place. */
+    /* Since Angular has this but needs to load, this gives us the class early. */
+    
+    .ng-hide {
+        display: none!important;
+    }
+    </style>    
+    
+    <!-- inject:css -->
+    <link rel="stylesheet" href="/.tmp/styles.css">
+    <!-- endinject -->
+    
+    
+    
+    <!-- bower:css -->
+    <link rel="stylesheet" href="/../bower_components/font-awesome/css/font-awesome.css" />
+    <link rel="stylesheet" href="/../bower_components/video.js/dist/video-js.css" />
+    <!-- endbower -->
+    
+</head>
+
+<body data-gr-c-s-loaded="true">
+    <header>
+        <!--Navbar-->
+        <nav class="navbar navbar-dark primary-color-dark">
+            <!-- Collapse button-->
+            <button class="navbar-toggler hidden-sm-up" type="button" data-toggle="collapse" data-target="#collapseEx">
+                <i class="fa fa-bars"></i>
+            </button>
+            <div class="container">
+                <!--Collapse content-->
+                <a class="navbar-brand waves-effect waves-light" href="/" alt="home" style="background: url('http://edge1.cdn.castaclip.net/assets/ilovevideo/vsm25/img/brand/castaclip_vdm_logotype_stars.png') no-repeat; height: 38px; width: 240px;">&nbsp;</a>
+                <div class="collapse navbar-toggleable-xs" id="collapseEx">
+                    <!--Links-->
+                    <ul class="nav navbar-nav">
+                        <li class="nav-item active">
+                            <a class="nav-link waves-effect waves-light" ng-sref="home">Home <span class="sr-only">(current)</span></a>
+                        </li>
+                    </ul>
+                </div>
+                <!--/.Collapse content-->
+            </div>
+        </nav>
+        <!--/.Navbar-->
+    </header>
+    <main class="">
+        <div ui-view></div>
+    </main>
+    <!--Footer-->
+    <footer class="page-footer center-on-small-only primary-color-dark">
+        <!--Call to action-->
+        <div class="call-to-action">
+            <h5>IloveVIDEO.tv</h5>
+        </div>
+        <!--/.Call to action-->
+    </footer>
+    <!--/.Footer-->
+    
+    <!-- bower:js -->
+    <script src="/../bower_components/jquery/dist/jquery.js"></script>
+    <script src="/../bower_components/angular/angular.js"></script>
+    <script src="/../bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="/../bower_components/tether/dist/js/tether.js"></script>
+    <script src="/../bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="/../bower_components/MDBootstrap/js/mdb.min.js"></script>
+    <script src="/../bower_components/extras.angular.plus/ngplus-overlay.js"></script>
+    <script src="/../bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="/../bower_components/angular-animate/angular-animate.js"></script>
+    <script src="/../bower_components/angular-ui-scroll/dist/ui-scroll.js"></script>
+    <script src="/../bower_components/video.js/dist/video.js"></script>
+    <script src="/../bower_components/vjs-video/dist/vjs-video.min.js"></script>
+    <!-- endbower -->
+    
+    
+    <!-- inject:js -->
+    <script src="/src/client/app/app.js"></script>
+    <script src="/src/client/app/config/constants.js"></script>
+    <script src="/src/client/app/services/ilovevideoService.js"></script>
+    <script src="/src/client/app/modules/home/homrCtrl.js"></script>
+    <!-- endinject -->
+
+    <!-- inject:templates:js -->
+    <!-- endinject -->    
+</body>
+
+</html>
