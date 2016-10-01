@@ -1,4 +1,5 @@
-# IloveVideo Website
+# IloveVideo Website   
+
 <br>
 this is my personal solution for ilovevideo task for javascript develper.
 i used in this solution some of boilerplate snippets to speed up the process .. ho
@@ -41,10 +42,21 @@ i used in this solution some of boilerplate snippets to speed up the process .. 
   <a href="https://shouldjs.github.io/" target="_blank" alt="shouldJS" title="shouldJS">
     <img height="100" src="https://avatars2.githubusercontent.com/u/7722513?v=3&s=200">
   </a>
+    <a href="http://videojs.com/" target="_blank" alt="shouldJS" title="shouldJS">
+    <img height="100" src="https://avatars3.githubusercontent.com/u/3287189?v=3&s=200">
+  </a>
+
  
 </p>
 <br>
 <br>
+# Why .... Why not this packages
+- videoJs its verry extisive lib provide html5 video players with fallback for flash media and it also provide responisive video players with rich APIs
+
+- ExpressJs to provide server routing
+
+- MDBootstrao to provide material design and responsive layout
+
 
 # Installation and Prerequisites
 
@@ -60,12 +72,20 @@ npm install --global bower
 
 # Start Development
 
-## Generating ilovevideo Website
-1. **Go to devProj directory** - and cd into it.
+### Top-level directory layout
 
-  ```sh
-  cd devProj
-  ```
+    .    
+    ├── src                     
+    │   ├── client          # holds client app files and tests
+    │   |   ├── app         # holds web application files 
+    │   ├── server          # holds servers files and DB conf
+    │   └── serverTests     # holds server tests by mocha        
+    ├── gulpconfig.js
+    ├── gulpconfig.js
+    └── README.md
+
+## Generating ilovevideo Website
+1. **Go to project directory** - and cd into it.
 
 1. **run npm and bower**
 
@@ -73,8 +93,13 @@ npm install --global bower
   npm install
   bower install
   ```
-  and follow the instructions
-
+1. ** add the following part to MDBootstrap bower folder at bower.json and .bower.json **
+```
+'main': [    
+    'js/mdb.min.js' ,
+    './fonts/*' 
+  ]
+```
 
 ## Running in the browser
 ```
@@ -86,4 +111,13 @@ When you run `gulp sserve` it does this to your `index.html`:
 - inject all bower javascript and css files (Angular,...)
 - inject all of your app files (compiled css, angular files, ...)
 
-`gulp serve` also livereloads your application when changing/adding/deleting files to immediately show the changes you make in your browser. For your convenience any occurring **ESLint or jsonlint errors** will be presented to you on every livereload.
+`gulp serve` also livereloads the application when changing/adding/deleting files to immediately show the changes you make in your browser.
+
+## Run Client / App test 
+
+` gulp test `
+
+## Run Server tests 
+
+` gulp mocha `
+
