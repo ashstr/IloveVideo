@@ -8,9 +8,11 @@ var videoModel = require('./videoModel');
 
 
 module.exports = function() {
+	var dbfile = process.env.DB_FILE ? process.env.DB_FILE : __dirname +'/../db.json';
 
 	function DBOP(func) {
-		var db = new loki(__dirname + '/../db.json', { autoload: true });
+console.log('------------- dbfile -------------'+dbfile);
+		var db = new loki( dbfile, { autoload: true });
 		db.loadDatabase({}, function() {
 			videoCollection = db.getCollection('video') ? db.getCollection('video') : db.addCollection('video');
 			func(videoCollection, db);
@@ -57,7 +59,7 @@ module.exports = function() {
 				throw err;
 			}
 			DBOP(function(videoCollection, db) {
-				var vid=videoCollection.get(req.params.id);				
+				var vid = videoCollection.get(req.params.id);
 				videoCollection.remove(vid);
 				db.saveDatabase();
 				res.send();
